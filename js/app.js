@@ -14,9 +14,14 @@ var Enemy = function (x, y, speed) {
 Enemy.prototype.update = function (dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.x += dt * this.speed
+    this.x += dt * this.speed;
+    this.repeat();
 };
-
+Enemy.prototype.repeat = function (dt) {
+    if (this.x > 500) {
+        this.x = -100;
+    }
+};
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
 Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -30,7 +35,10 @@ var Player = function (x, y) {
     this.sprite = 'images/char-boy.png';
 };
 Player.prototype.update = function (dt) {
-
+    if (this.y > 460 || this.x > 500 || this.y < -40 || this.x < -100) {
+        this.x = 200;
+        this.y = 400;
+    }
 };
 Player.prototype.handleInput = function (movement) {
     switch (movement) {
@@ -45,13 +53,13 @@ Player.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 Player.prototype.reset = function () {
-    this.x = 100;
-    this.y = 100;
+    this.x = 200;
+    this.y = 400;
 };
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
-var allEnemies = [new Enemy(0, 200, 10)];
+var allEnemies = [new Enemy(0, 200, 100), new Enemy(0, 300, 120), new Enemy(0, 100, 140)];
 var player = new Player(202, 200);
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
