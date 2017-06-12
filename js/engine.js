@@ -10,7 +10,7 @@
  * 公开访问，以此使编写app.js的时候更加容易
  */
 
-var Engine = (function(global) {
+var Engine = (function (global) {
     /* 实现定义我们会在这个作用于用到的变量
      * 创建 canvas 元素，拿到对应的 2D 上下文
      * 设置 canvas 元素的高/宽 然后添加到dom中
@@ -65,7 +65,15 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+    }
+    // 碰撞检测函数
+    function checkCollisions() {
+        allEnemies.forEach(function (enemy) {
+            if (Math.abs(enemy.x - player.x) < 50 && Math.abs(enemy.y - player.y) < 50) {
+               reset();
+            }
+        })
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -73,7 +81,7 @@ var Engine = (function(global) {
      * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.update(dt);
         });
         player.update();
@@ -87,13 +95,13 @@ var Engine = (function(global) {
     function render() {
         /* 这个数组保存着游戏关卡的特有的行对应的图片相对路径。 */
         var rowImages = [
-                'images/water-block.png',   // 这一行是河。
-                'images/stone-block.png',   // 第一行石头
-                'images/stone-block.png',   // 第二行石头
-                'images/stone-block.png',   // 第三行石头
-                'images/grass-block.png',   // 第一行草地
-                'images/grass-block.png'    // 第二行草地
-            ],
+            'images/water-block.png',   // 这一行是河。
+            'images/stone-block.png',   // 第一行石头
+            'images/stone-block.png',   // 第二行石头
+            'images/stone-block.png',   // 第三行石头
+            'images/grass-block.png',   // 第一行草地
+            'images/grass-block.png'    // 第二行草地
+        ],
             numRows = 6,
             numCols = 5,
             row, col;
@@ -117,7 +125,7 @@ var Engine = (function(global) {
      */
     function renderEntities() {
         /* 遍历在 allEnemies 数组中存放的作于对象然后调用你事先定义的 render 函数 */
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.render();
         });
 
@@ -129,7 +137,7 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
-        // 空操作
+        player.reset();
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
